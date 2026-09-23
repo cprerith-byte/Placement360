@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement 360 | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        Placement<span>360</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Applications</a>
+        <a href="/dashboard">Dashboard</a>
+    </div>
+</nav>
+
+<main class="dashboard">
+
+    <div class="dashboard-header">
+        <div>
+            <div class="small-title">RECRUITMENT OVERVIEW</div>
+            <h1>Placement Dashboard</h1>
+            <p>Review all submitted job applications in one place.</p>
+        </div>
+
+        <a href="/" class="new-application">
+            + New Application
+        </a>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div>
+                <span>Total Applicants</span>
+                <h2>{{ total }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div>
+                <span>Average Analysis</span>
+                <h2>{{ average }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🧠</div>
+            <div>
+                <span>Applications Analyzed</span>
+                <h2>{{ total }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🌐</div>
+            <div>
+                <span>System Status</span>
+                <h2 class="online">Online</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="applicants-card">
+
+        <div class="table-header">
+
+            <div>
+                <h2>All Applicants</h2>
+                <p>Job-related application information</p>
+            </div>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search applicants..."
+            >
+
+        </div>
+
+        <div class="table-container">
+
+            <table id="applicantTable">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Candidate</th>
+                        <th>Email</th>
+                        <th>Education</th>
+                        <th>Experience</th>
+                        <th>Skills</th>
+                        <th>Analysis</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for applicant in applicants %}
+
+                    <tr>
+
+                        <td>#{{ applicant["id"] }}</td>
+
+                        <td>
+                            <div class="candidate-name">
+
+                                <div class="avatar">
+                                    {{ applicant["name"][0]|upper }}
+                                </div>
+
+                                <strong>
+                                    {{ applicant["name"] }}
+                                </strong>
+
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ applicant["email"] }}
+                        </td>
+
+                        <td>
+                            {{ applicant["education"] }}
+                        </td>
+
+                        <td>
+                            {{ applicant["experience"] }} yrs
+                        </td>
+
+                        <td>
+                            <div class="skills">
+                                {{ applicant["skills"] }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="score-badge">
+                                {{ applicant["score"] }}/100
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ applicant["created_at"] }}
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="8" class="no-applicants">
+
+                            No applications yet.
+
+                            <br><br>
+
+                            <a href="/">
+                                Add the first application
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="model-info">
+
+        <div>
+
+            <div class="model-icon">🌳</div>
+
+            <div>
+                <h3>Decision Tree</h3>
+
+                <p>
+                    Transparent model for analysing
+                    job-related application features.
+                </p>
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="model-icon">🌲</div>
+
+            <div>
+                <h3>Random Forest</h3>
+
+                <p>
+                    Ensemble machine-learning model
+                    for application analysis.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Placement 360
+</footer>
+
+<script>
+
+const searchInput =
+    document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", function () {
+
+    const search =
+        searchInput.value.toLowerCase();
+
+    const rows =
+        document.querySelectorAll(
+            "#applicantTable tbody tr"
+        );
+
+    rows.forEach(function (row) {
+
+        const text =
+            row.textContent.toLowerCase();
+
+        if (text.includes(search)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
